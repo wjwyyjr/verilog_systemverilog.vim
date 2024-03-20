@@ -23,7 +23,7 @@ setlocal indentkeys+==endgenerate,=endchecker,=endconfig,=endprimitive,=endtable
 setlocal indentkeys+==`else,=`endif
 setlocal indentkeys+=;
 
-let s:vlog_open_statement = '\([<>:!=?&|^%/*+]\|-[^>]\)'
+let s:vlog_open_statement = '\([<>:!=?&|^%/*]\|+\%([;+]\)\@!\|-\%([>;-]\)\@!\)'
 let s:vlog_end_statement  = ')\s*;'
 let s:vlog_comment        = '\(//.*\|/\*.*\*/\)'
 let s:vlog_macro          = '`\k\+\((.*)\)\?\s*$'
@@ -278,8 +278,14 @@ function! s:GetContextIndent()
       if l:line =~ s:vlog_assign . '[^;]*$' && (!s:InsideAssign(l:lnum))
         if l:line !~ s:vlog_assign . '\s*$'
           " If there are values after the assignment, then use that column as
-          " the indentation of the open statement.
-          let l:assign = substitute(l:line, s:vlog_assign .'\s*\zs.*', '', "")
+          " the indentation of the open statement, or the column of the
+          " assign symbol itself if "verilog_indent_assign_on_symbol" is
+          " defined.
+          if (verilog_systemverilog#VariableExists("verilog_indent_assign_on_symbol"))
+            let l:assign = substitute(l:line, s:vlog_assign .'.*', '=', "")
+          else
+            let l:assign = substitute(l:line, s:vlog_assign .'\s*\zs.*', '', "")
+          endif
           let l:assign_offset = len(l:assign)
           call verilog_systemverilog#Verbose(
             "Increasing indent for an open assignment with values (by " . l:assign_offset .")."
