@@ -27,10 +27,10 @@ command! -nargs=+ -complete=customlist,verilog_systemverilog#CompleteCommand
             \ call verilog_systemverilog#PopFromVariable('verilog_efm_uvm_lst', '<args>')
 
 " Configure tagbar
-if !exists("g:tagbar_type_verilog_systemverilog")
+if !exists("g:tagbar_type_systemverilog")
     " This requires a recent version of universal-ctags
-    let g:tagbar_type_verilog_systemverilog = {
-        \ 'ctagstype'   : 'SystemVerilog',
+    let g:tagbar_type_systemverilog = {
+        \ 'ctagstype'   : 'systemverilog',
         \ 'kinds'       : [
             \ 'b:blocks:1:1',
             \ 'c:constants:1:0',

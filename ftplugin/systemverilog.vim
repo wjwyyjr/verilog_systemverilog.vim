@@ -69,6 +69,7 @@ endif
 let &cpoptions=oldcpo
 unlet oldcpo
 
+setlocal nosmartindent
 " Raise warning if smartindent is defined
 if &smartindent
     echohl WarningMsg
